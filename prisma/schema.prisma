@@ -43,13 +43,25 @@ model PRODUCT {
 
 
 model ORDER_DETAIL {
-  id              Int      @id @default(autoincrement())
+  id              Int           @id @default(autoincrement())
+  price           Int?
+  status          String?
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @default(now()) @updatedAt
+  order_items     ORDER_ITEMS[] @relation("OrderDetailToOrderItems")
+  detail_cancel   String?
+}
+
+model ORDER_ITEMS {
+  id              Int           @id @default(autoincrement())
+  orderdetail_id  Int?
   product_id      Int?
   sweetness_level Int?
   price           Int?
-  note            String?   @db.Text
-  created_at     DateTime   @default(now())
-  updated_at     DateTime   @default(now()) @updatedAt
+  note            String?       @db.Text
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @default(now()) @updatedAt
+  order_detail    ORDER_DETAIL? @relation(fields: [orderdetail_id], references: [id], name: "OrderDetailToOrderItems")
 }
 
 

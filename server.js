@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const corsOptions = {
-  origin: 'https://psom-medical.netlify.app',
+  origin: '*',
   credentials: true,
 };
 

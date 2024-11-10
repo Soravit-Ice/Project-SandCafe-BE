@@ -40,7 +40,7 @@ exports.login = async (req, res) => {
 
 exports.signup = async (req, res) => {
   const { name, email, password, phone_number, role } = req.body;
-
+  console.log(req.body)
   if (!email || !password) {
     return res.status(400).json({ error: "Email and password are required", status: 400 });
   }
@@ -71,4 +71,25 @@ exports.signup = async (req, res) => {
   }
 };
 
+
+exports.getUserById = async (req, res) => {
+  let userId = req.userId
+
+  if (!userId) {
+    return res.status(400).json({ error: "userId are required", status: 400 });
+  }
+
+  try {
+
+    const user = await userClient.findUnique({
+      where: { id: userId },
+      include: { roles: { include: { role: true } } }
+    });
+
+    res.status(201).json({ message: "Get User Success" , data:user , status: 201 });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ error: "Internal server error", status: 500 });
+  }
+};
 
