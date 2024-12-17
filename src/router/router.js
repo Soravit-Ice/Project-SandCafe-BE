@@ -62,6 +62,7 @@ app.get('/api/getUserById',[authJwt.verifyToken], userController.getUserById)
 //editUser
 app.post('/api/getUserById',[authJwt.verifyToken], userController.getUserById)
 app.get('/api/productFindAll', productController.getAllProduct)
+app.post('/api/saveProduct', productController.saveProduct)
 app.post('/api/saveOrderDetail', productController.saveOrderDetail)
 app.post('/api/cancelOrderDetail', productController.cancelOrder)
 
