@@ -35,8 +35,10 @@ model USER_ROLES {
 model PRODUCT {
   id             Int      @id @default(autoincrement())
   image          String?
-  quanitity      Int?
-  price           Int?
+  name           String?
+  price          Int?
+  category       String?
+  subcategory    String?
   created_at     DateTime   @default(now())
   updated_at     DateTime   @default(now()) @updatedAt
 }
