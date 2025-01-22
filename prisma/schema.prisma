@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -17,6 +17,10 @@ model USER {
   created_at     DateTime   @default(now())
   updated_at     DateTime   @default(now()) @updatedAt
   roles          USER_ROLES[]
+
+  POINTS POINTS[]
+
+  POINTS_REDEMPTION POINTS_REDEMPTION[]
 }
 
 
@@ -41,6 +45,8 @@ model PRODUCT {
   subcategory    String?
   created_at     DateTime   @default(now())
   updated_at     DateTime   @default(now()) @updatedAt
+
+  ORDER_ITEMS ORDER_ITEMS[] @relation("ProductMany")
 }
 
 
@@ -50,21 +56,58 @@ model ORDER_DETAIL {
   status          String?
   created_at      DateTime      @default(now())
   updated_at      DateTime      @default(now()) @updatedAt
+  image           String?
   order_items     ORDER_ITEMS[] @relation("OrderDetailToOrderItems")
   detail_cancel   String?
+  user_id         Int?        @default(1)
+  POINTS POINTS[]
+
+  POINTS_REDEMPTION POINTS_REDEMPTION[]
 }
 
 model ORDER_ITEMS {
   id              Int           @id @default(autoincrement())
   orderdetail_id  Int?
-  product_id      Int?
+  user_id         Int?     
+  product_id      Int
   sweetness_level Int?
+  quantity        Int?
   price           Int?
   note            String?       @db.Text
   created_at      DateTime      @default(now())
   updated_at      DateTime      @default(now()) @updatedAt
   order_detail    ORDER_DETAIL? @relation(fields: [orderdetail_id], references: [id], name: "OrderDetailToOrderItems")
+  product         PRODUCT     @relation(fields: [product_id], references: [id] , name: "ProductMany")
 }
+
+
+model POINTS {
+  id             Int        @id @default(autoincrement())
+  user_id        Int
+  earned_points  Int        @default(0) // Points earned from an order
+  used_points    Int        @default(0) // Points redeemed
+  order_id       Int?                   // Optional, to track points from a specific order
+  created_at     DateTime   @default(now())
+  updated_at     DateTime   @default(now()) @updatedAt
+
+  user           USER       @relation(fields: [user_id], references: [id])
+  order_detail   ORDER_DETAIL? @relation(fields: [order_id], references: [id])
+}
+
+model POINTS_REDEMPTION {
+  id             Int        @id @default(autoincrement())
+  user_id        Int
+  redeemed_points Int
+  discount       Float      
+  order_id       Int?       
+  created_at     DateTime   @default(now())
+  updated_at     DateTime   @default(now()) @updatedAt
+  status         String?    @default("NOT_USE")
+  user           USER       @relation(fields: [user_id], references: [id])
+  order_detail   ORDER_DETAIL? @relation(fields: [order_id], references: [id])
+}
+
+
 
 
 model ROLES {

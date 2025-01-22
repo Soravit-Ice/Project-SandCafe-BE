@@ -37,13 +37,26 @@ app.post('/api/login', userController.login)
 app.post('/api/signup', userController.signup)
 //getByIdUser
 app.get('/api/getUserById',[authJwt.verifyToken], userController.getUserById)
+app.get('/api/getPointUserById',[authJwt.verifyToken], userController.getPointByUser)
 //upload
 //editUser
-app.post('/api/getUserById',[authJwt.verifyToken], userController.getUserById)
 app.get('/api/productFindAll', productController.getAllProduct)
+app.post('/api/checkoutOrder',[authJwt.verifyToken],upload.single('file'), productController.checkoutOrder)
+app.post('/api/updateUser',[authJwt.verifyToken], userController.updateUserById)
+app.get('/api/findProduct/:productId', productController.getProductById)
 app.post('/api/saveProduct',upload.single('file'), productController.saveProduct)
+app.post('/api/addToOrder',[authJwt.verifyToken], productController.addToOrder)
+app.get('/api/getOrderDetail',[authJwt.verifyToken], productController.getOrderDetailItems)
+app.delete('/api/deleteOrderItem/:itemId',[authJwt.verifyToken], productController.deleteOrderItem)
+app.put('/api/updateOrderItem/:itemId',[authJwt.verifyToken], productController.updateOrderItem)
 app.post('/api/saveOrderDetail', productController.saveOrderDetail)
 app.post('/api/cancelOrderDetail', productController.cancelOrder)
+app.get('/api/getOrderDetailAdmin', productController.getOrderDetail);
+app.put('/api/changeStatusOrder/:idOrder', productController.changeStatusOrderDetail);
+app.get('/api/orders', productController.getOrderHistoryByDate);
+app.get('/api/getOrderHistoryByUserId',[authJwt.verifyToken], productController.getOrderHistoryByUserId);
 
-  
+app.get('/api/getDiscount',[authJwt.verifyToken], productController.getDiscount);
+app.post('/api/redeemPoints',[authJwt.verifyToken], productController.redeemPoints);
+app.post('/api/applyDiscount',[authJwt.verifyToken], productController.applyDiscount);
 }

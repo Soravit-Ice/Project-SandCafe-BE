@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE `PRODUCT` ADD COLUMN `category` VARCHAR(191) NULL,
-    ADD COLUMN `subcategory` VARCHAR(191) NULL;

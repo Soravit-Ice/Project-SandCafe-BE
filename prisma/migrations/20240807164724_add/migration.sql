@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE `ORDER_DETAIL` ADD COLUMN `detail_cancel` VARCHAR(191) NULL;
