@@ -96,6 +96,37 @@ exports.getUserById = async (req, res) => {
 };
 
 
+exports.getAllUser = async (req, res) => {
+  try {
+    const users = await userClient.findMany({
+      where: {
+        roles: {
+          some: {
+            roleId: 1, 
+          },
+        },
+      },
+      include: {
+        roles: {
+          include: {
+            role: true, 
+          },
+        },
+      },
+    });
+
+    res.status(200).json({
+      message: "Get Users with Role 1 Success",
+      data: users,
+      status: 200,
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "Internal server error", status: 500 });
+  }
+};
+
+
 exports.updateUserById = async (req, res) => {
   const userId = req.userId; 
   const { name, phoneNumber, email } = req.body; 

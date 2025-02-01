@@ -265,6 +265,7 @@ exports.addToOrder = async (req, res) => {
 const calculatePoints = (totalPrice) => Math.floor(totalPrice / 500);
 
 exports.checkoutOrder = async (req, res) => {
+  console.log("start1")
   const user_id = req.userId;
   if (!req.file) {
     return res.status(400).send({ message: "No file uploaded.", status: 400 });
@@ -910,6 +911,38 @@ exports.applyDiscount = async (req, res) => {
   }
 };
 
+
+exports.deleteProduct = async (req, res) => {
+  const { productId } = req.params; // Item ID from the request parameters
+
+  try {
+    if (!productId) {
+      return res.status(400).json({
+        error: "productId are required",
+        status: 400,
+      });
+    }
+
+    // Check if the item exists and belongs to the user
+    await prisma.PRODUCT.delete({
+      where: {
+        id: parseInt(productId),
+      },
+    });
+
+
+    res.status(200).json({
+      message: "Product deleted successfully",
+      status: 200,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: "Internal server error",
+      status: 500,
+    });
+  }
+};
 
 
 
