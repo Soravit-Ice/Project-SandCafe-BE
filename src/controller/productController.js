@@ -718,9 +718,10 @@ exports.getOrderHistoryByDate = async (req, res) => {
       // Using for...of loop to wait for async operations
       for (const data of orderDetail) {
         if (data) {
+          console.log("data",data)
           const order = await prisma.ORDER_DETAIL.findUnique({
             where: {
-              id: data.orderdetail_id,
+              id: data?.orderdetail_id,
               status: "Confirm",
             },
           });
