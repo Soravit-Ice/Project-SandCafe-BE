@@ -724,7 +724,7 @@ exports.getOrderHistoryByDate = async (req, res) => {
               id: data?.orderdetail_id,
               status: "Confirm",
             },
-          });
+          });  
           console.log("orderDetail 2", order);
           if (order) {
             response.data.push(data);
