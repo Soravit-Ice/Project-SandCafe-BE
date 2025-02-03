@@ -17,7 +17,7 @@ model USER {
   created_at     DateTime   @default(now())
   updated_at     DateTime   @default(now()) @updatedAt
   roles          USER_ROLES[]
-
+  firebase_token String?
   POINTS POINTS[]
 
   POINTS_REDEMPTION POINTS_REDEMPTION[]
