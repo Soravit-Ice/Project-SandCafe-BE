@@ -1,4 +1,4 @@
-module.exports = function (app) {
+module.exports = function (app , admin) {
   const userController = require('../controller/userController.js')
   const adminController = require('../controller/adminController.js')
   const productController = require('../controller/productController.js')
@@ -42,7 +42,7 @@ app.get('/api/getPointUserById',[authJwt.verifyToken], userController.getPointBy
 //upload
 //editUser
 app.get('/api/productFindAll', productController.getAllProduct)
-app.post('/api/checkoutOrder',upload.single('file'),[authJwt.verifyToken], productController.checkoutOrder)
+app.post('/api/checkoutOrder',upload.single('file'),[authJwt.verifyToken], productController.checkoutOrder(admin))
 app.post('/api/updateUser',[authJwt.verifyToken], userController.updateUserById)
 app.get('/api/findProduct/:productId', productController.getProductById)
 app.post('/api/saveProduct',upload.single('file'), productController.saveProduct)
@@ -61,4 +61,5 @@ app.get('/api/getOrderHistoryByUserId',[authJwt.verifyToken], productController.
 app.get('/api/getDiscount',[authJwt.verifyToken], productController.getDiscount);
 app.post('/api/redeemPoints',[authJwt.verifyToken], productController.redeemPoints);
 app.post('/api/applyDiscount',[authJwt.verifyToken], productController.applyDiscount);
+app.post('api/save-fcm-token',[authJwt.verifyToken], userController.saveFCMToken);
 }

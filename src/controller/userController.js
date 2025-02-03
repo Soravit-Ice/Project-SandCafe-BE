@@ -206,6 +206,23 @@ exports.getPointByUser = async (req, res) => {
 };
 
 
+exports.saveFCMToken = async (req, res) => {
+  const { token } = req.body;
+  const userId = req.userId;
+
+  try {
+    await userClient.update({
+      where: { id: userId },
+      data: { firebase_token: token },
+    });
+
+    return res.status(200).json({ message: "FCM token saved successfully" });
+  } catch (error) {
+    console.error("Error saving FCM token:", error);
+    return res.status(500).json({ error: "Failed to save FCM token" });
+  }
+};
+
 
 
 

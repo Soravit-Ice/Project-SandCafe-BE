@@ -2,7 +2,8 @@ const express = require('express');
 const app = express();
 const cors = require('cors'); 
 const bodyParser = require('body-parser');
-
+const admin = require("firebase-admin");
+const serviceAccount = require("./eonni-cafe-service"); // Replace with your Firebase credentials
 const corsOptions = {
   origin: '*',
   credentials: true,
@@ -10,8 +11,10 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(bodyParser.json())
-
-require('./src/router/router.js')(app);
+admin.initializeApp({
+	credential: admin.credential.cert(serviceAccount),
+  });
+require('./src/router/router.js')(app , admin);
 
 
   

@@ -77,7 +77,7 @@ model ORDER_ITEMS {
   created_at      DateTime      @default(now())
   updated_at      DateTime      @default(now()) @updatedAt
   order_detail    ORDER_DETAIL? @relation(fields: [orderdetail_id], references: [id], name: "OrderDetailToOrderItems")
-  product         PRODUCT     @relation(fields: [product_id], references: [id] , name: "ProductMany", onDelete: Cascade)
+  product         PRODUCT     @relation(fields: [product_id], references: [id] , name: "ProductMany")
 }
 
 

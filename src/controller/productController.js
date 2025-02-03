@@ -264,7 +264,7 @@ exports.addToOrder = async (req, res) => {
 
 const calculatePoints = (totalPrice) => Math.floor(totalPrice / 500);
 
-exports.checkoutOrder = async (req, res) => {
+exports.checkoutOrder = async (admin , req, res) => {
   console.log("start1")
   const user_id = req.userId;
   if (!req.file) {
@@ -342,6 +342,34 @@ exports.checkoutOrder = async (req, res) => {
         orderdetail_id: newOrderDetail.id,
       },
     });
+
+    const adminUsers = await prisma.USER.findMany({
+      where: {
+        roles: { some: { roleId: 2 } }, // roleId 2 = Admin
+      },
+      select: { firebase_token: true }, // Store FCM token in the database
+    });
+
+    const adminTokens = adminUsers.map((admin) => admin.firebase_token).filter(Boolean);
+
+    if (adminTokens.length > 0) {
+      const message = {
+        notification: {
+          title: "New Order Received",
+          body: `User ${user_id} has placed an order.`,
+        },
+        tokens: adminTokens, // Send to multiple admins
+      };
+
+      admin.messaging().sendMulticast(message)
+        .then((response) => {
+          console.log("Notification sent successfully:", response);
+        })
+        .catch((error) => {
+          console.error("Error sending notification:", error);
+        });
+    }
+
 
     res.status(201).json({
       data: newOrderDetail,
