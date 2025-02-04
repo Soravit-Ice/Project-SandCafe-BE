@@ -283,7 +283,7 @@ const sendPushNotification = async (expoPushToken, message) => {
 };
 
 
-exports.checkoutOrder = async (admins , req, res) => {
+exports.checkoutOrder = async ( req, res) => {
   console.log("start1")
   const user_id = req.userId;
   if (!req.file) {
@@ -360,6 +360,14 @@ exports.checkoutOrder = async (admins , req, res) => {
       data: {
         orderdetail_id: newOrderDetail.id,
       },
+    });
+
+    const admins = await prisma.USER.findMany({
+      where: {
+        roles: { some: { roleId: 2 } },
+        push_token: { not: null }, // Ensure admin has a push token
+      },
+      select: { push_token: true },
     });
 
     const notificationPromises = admins.map((admin) =>

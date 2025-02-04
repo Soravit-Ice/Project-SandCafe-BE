@@ -209,7 +209,7 @@ exports.getPointByUser = async (req, res) => {
 exports.saveFCMToken = async (req, res) => {
   const { token } = req.body;
   const userId = req.userId;
-
+    console.log("start saveFCMToken")
   try {
     await userClient.update({
       where: { id: userId },

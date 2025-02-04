@@ -42,7 +42,7 @@ app.get('/api/getPointUserById',[authJwt.verifyToken], userController.getPointBy
 //upload
 //editUser
 app.get('/api/productFindAll', productController.getAllProduct)
-app.post('/api/checkoutOrder',upload.single('file'),[authJwt.verifyToken], (req , res) => productController.checkoutOrder(admin, req, res))
+app.post('/api/checkoutOrder',upload.single('file'),[authJwt.verifyToken], (req , res) => productController.checkoutOrder(req, res))
 app.post('/api/updateUser',[authJwt.verifyToken], userController.updateUserById)
 app.get('/api/findProduct/:productId', productController.getProductById)
 app.post('/api/saveProduct',upload.single('file'), productController.saveProduct)
