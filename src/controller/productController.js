@@ -283,7 +283,7 @@ const sendPushNotification = async (expoPushToken, message) => {
 };
 
 
-exports.checkoutOrder = async (req, res) => {
+exports.checkoutOrder = async (admins , req, res) => {
   console.log("start1")
   const user_id = req.userId;
   if (!req.file) {
