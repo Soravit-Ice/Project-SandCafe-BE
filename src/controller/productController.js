@@ -264,7 +264,26 @@ exports.addToOrder = async (req, res) => {
 
 const calculatePoints = (totalPrice) => Math.floor(totalPrice / 500);
 
-exports.checkoutOrder = async (admin , req, res) => {
+
+const sendPushNotification = async (expoPushToken, message) => {
+  await fetch("https://exp.host/--/api/v2/push/send", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Accept-Encoding": "gzip, deflate",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      to: expoPushToken,
+      sound: "default",
+      title: "New Order Checkout",
+      body: message,
+    }),
+  });
+};
+
+
+exports.checkoutOrder = async (req, res) => {
   console.log("start1")
   const user_id = req.userId;
   if (!req.file) {
@@ -343,32 +362,10 @@ exports.checkoutOrder = async (admin , req, res) => {
       },
     });
 
-    const adminUsers = await prisma.USER.findMany({
-      where: {
-        roles: { some: { roleId: 2 } }, // roleId 2 = Admin
-      },
-      select: { firebase_token: true }, // Store FCM token in the database
-    });
-
-    const adminTokens = adminUsers.map((admin) => admin.firebase_token).filter(Boolean);
-
-    if (adminTokens.length > 0) {
-      const message = {
-        notification: {
-          title: "New Order Received",
-          body: `User ${user_id} has placed an order.`,
-        },
-        tokens: adminTokens, // Send to multiple admins
-      };
-
-      admin.messaging().sendMulticast(message)
-        .then((response) => {
-          console.log("Notification sent successfully:", response);
-        })
-        .catch((error) => {
-          console.error("Error sending notification:", error);
-        });
-    }
+    const notificationPromises = admins.map((admin) =>
+      sendPushNotification(admin.push_token, `A new order has been placed!`)
+    );
+    await Promise.all(notificationPromises);
 
 
     res.status(201).json({
