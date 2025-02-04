@@ -213,7 +213,7 @@ exports.saveFCMToken = async (req, res) => {
   try {
     await userClient.update({
       where: { id: userId },
-      data: { firebase_token: token },
+      data: { device_token: token },
     });
 
     return res.status(200).json({ message: "FCM token saved successfully" });
