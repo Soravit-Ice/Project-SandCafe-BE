@@ -365,13 +365,13 @@ exports.checkoutOrder = async ( req, res) => {
     const admins = await prisma.USER.findMany({
       where: {
         roles: { some: { roleId: 2 } },
-        push_token: { not: null }, // Ensure admin has a push token
+        device_token: { not: null }, // Ensure admin has a push token
       },
-      select: { push_token: true },
+      select: { device_token: true },
     });
 
     const notificationPromises = admins.map((admin) =>
-      sendPushNotification(admin.push_token, `A new order has been placed!`)
+      sendPushNotification(admin.device_token, `A new order has been placed!`)
     );
     await Promise.all(notificationPromises);
 
