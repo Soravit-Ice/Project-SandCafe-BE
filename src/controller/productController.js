@@ -267,7 +267,7 @@ const calculatePoints = (totalPrice) => Math.floor(totalPrice / 500);
 
 const sendPushNotification = async (expoPushToken, message) => {
   console.log("expoPushToken",expoPushToken)
-  await fetch("https://exp.host/--/api/v2/push/send", {
+  await fetch("https://api.expo.dev/v2/push/send?useFcmV1=true", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
