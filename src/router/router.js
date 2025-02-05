@@ -61,5 +61,5 @@ app.get('/api/getOrderHistoryByUserId',[authJwt.verifyToken], productController.
 app.get('/api/getDiscount',[authJwt.verifyToken], productController.getDiscount);
 app.post('/api/redeemPoints',[authJwt.verifyToken], productController.redeemPoints);
 app.post('/api/applyDiscount',[authJwt.verifyToken], productController.applyDiscount);
-app.post('api/save-fcm-token',[authJwt.verifyToken], userController.saveFCMToken);
+app.post('/api/save-fcm-token',[authJwt.verifyToken], userController.saveFCMToken);
 }
