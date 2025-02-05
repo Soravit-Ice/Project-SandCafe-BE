@@ -269,8 +269,6 @@ const sendPushNotification = async (expoPushToken, message) => {
   await fetch("https://exp.host/--/api/v2/push/send", {
     method: "POST",
     headers: {
-      Accept: "application/json",
-      "Accept-Encoding": "gzip, deflate",
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -279,7 +277,7 @@ const sendPushNotification = async (expoPushToken, message) => {
       title: "New Order Checkout",
       body: message,
     }),
-  });
+  }).then((data) => console.log(data)).catch((e) => console.log(e));
 };
 
 
