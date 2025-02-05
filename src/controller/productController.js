@@ -277,7 +277,10 @@ const sendPushNotification = async (expoPushToken, message) => {
       title: "New Order Checkout",
       body: message,
     }),
-  }).then((data) => console.log(data)).catch((e) => console.log(e));
+  }).then((data) => {
+    console.log("body",data.body)
+    console.log(data)
+  }).catch((e) => console.log(e));
 };
 
 
