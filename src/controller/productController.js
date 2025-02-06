@@ -631,7 +631,9 @@ exports.getOrderDetail = async (req, res) => {
 
   try {
 
-    const orderDetail = await prisma.ORDER_DETAIL.findMany();
+    const orderDetail = await prisma.ORDER_DETAIL.findMany({ orderBy: {
+      created_at: 'desc',
+    },});
 
     if (!orderDetail || orderDetail.length === 0) {
       return res.status(200).json({
@@ -789,8 +791,11 @@ exports.getOrderHistoryByUserId = async (req, res) => {
       },
       include:{
         product:true
-      }
-    });
+      },
+       orderBy: {
+        created_at: 'desc',
+      },}
+    );
 
     console.log("orderDetail", orderDetail);
     if (orderDetail && orderDetail.length > 0) {
