@@ -224,5 +224,3 @@ exports.saveFCMToken = async (req, res) => {
 };
 
 
-
-

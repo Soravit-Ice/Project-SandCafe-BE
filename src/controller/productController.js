@@ -987,6 +987,55 @@ exports.deleteProduct = async (req, res) => {
 
 
 
+exports.getOrderItemsDetailByOrderId = async (req, res) => {
+  try {
+      const { orderId } = req.params;
+      
+      // Fetch order details including user and products
+      const orderDetails = await prisma.ORDER_DETAIL.findUnique({
+          where: { id: parseInt(orderId) },
+          include: {
+              order_items: {
+                  include: {
+                      product: true, // Include product details
+                  },
+              },
+          },
+      });
+
+      if (!orderDetails) {
+          return res.status(404).json({ message: 'Order not found' });
+      }
+
+      // Fetch user details
+      const user = await prisma.USER.findUnique({
+          where: { id: orderDetails.user_id },
+          select: { id: true, name: true, email: true, phone_number: true },
+      });
+
+      return res.status(200).json({
+          user,
+          orderId: orderDetails.id,
+          price: orderDetails.price,
+          status: orderDetails.status,
+          slip : orderDetails.image,
+          products: orderDetails.order_items.map(item => ({
+              id: item.product.id,
+              name: item.product.name,
+              image: item.product.image,
+              price: item.product.price,
+              quantity: item.quantity,
+              sweetness_level: item.sweetness_level,
+              note: item.note,
+          })),
+      });
+  } catch (error) {
+      console.error('Error fetching order details:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
 
 
 

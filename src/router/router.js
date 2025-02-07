@@ -54,6 +54,7 @@ app.post('/api/saveOrderDetail', productController.saveOrderDetail)
 app.post('/api/cancelOrderDetail', productController.cancelOrder)
 app.get('/api/getOrderDetailAdmin', productController.getOrderDetail);
 app.delete('/api/deleteProduct/:productId', productController.deleteProduct);
+app.get('/api/getOrderItemsDetailByOrderId/:orderId', productController.getOrderItemsDetailByOrderId);
 app.put('/api/changeStatusOrder/:idOrder', productController.changeStatusOrderDetail);
 app.get('/api/orders', productController.getOrderHistoryByDate);
 app.get('/api/getOrderHistoryByUserId',[authJwt.verifyToken], productController.getOrderHistoryByUserId);
