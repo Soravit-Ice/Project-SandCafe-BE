@@ -1019,6 +1019,7 @@ exports.getOrderItemsDetailByOrderId = async (req, res) => {
           price: orderDetails.price,
           status: orderDetails.status,
           slip : orderDetails.image,
+          created_at :orderDetails.created_at,
           products: orderDetails.order_items.map(item => ({
               id: item.product.id,
               name: item.product.name,
