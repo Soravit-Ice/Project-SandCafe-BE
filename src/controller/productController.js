@@ -805,6 +805,9 @@ exports.getOrderHistoryByUserId = async (req, res) => {
             where: {
               id: data?.orderdetail_id,
               status: "Confirm",
+              orderBy: {
+                created_at: 'desc',
+              }
             },
           });
           console.log("orderDetail 2", order);
