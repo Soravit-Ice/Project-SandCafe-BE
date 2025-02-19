@@ -15,7 +15,6 @@ exports.getAllProduct = async (req, res) => {
     // Base query
     const query = {
       skip: Number(skip),
-      take: Number(limit),
       where: {},
     };
 
