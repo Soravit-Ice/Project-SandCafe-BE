@@ -752,36 +752,38 @@ exports.getOrderHistoryByDate = async (req, res) => {
 
 
 exports.getOrderHistoryByUserId = async (req, res) => {
-  const userId = req.userId
+  const userId = req.userId;
   let response = { data: [], status: 200 };
+
   try {
     // Fetch orders with status "Success" for the exact date
     const orderDetail = await prisma.ORDER_ITEMS.findMany({
       where: {
         user_id: userId
       },
-      include:{
-        product:true
+      include: {
+        product: true
       },
-       orderBy: {
-        created_at: 'desc',
-      },}
-    );
+      orderBy: {
+        created_at: 'desc', // ✅ Correct placement
+      },
+    });
 
     console.log("orderDetail", orderDetail);
+    
     if (orderDetail && orderDetail.length > 0) {
-      // Using for...of loop to wait for async operations
       for (const data of orderDetail) {
-        if (data && data?.orderdetail_id) {
-          const order = await prisma.ORDER_DETAIL.findUnique({
+        if (data?.orderdetail_id) {
+          const order = await prisma.ORDER_DETAIL.findFirst({
             where: {
               id: data?.orderdetail_id,
               status: "Confirm",
-              orderBy: {
-                created_at: 'desc',
-              }
+            },
+            orderBy: {
+              created_at: 'desc', // ✅ Now valid
             },
           });
+
           console.log("orderDetail 2", order);
           if (order) {
             response.data.push(data);
@@ -797,6 +799,7 @@ exports.getOrderHistoryByUserId = async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 exports.redeemPoints = async (req, res) => {
   const userId = req.userId;
