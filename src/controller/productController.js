@@ -8,52 +8,15 @@ const cloudinary = require('cloudinary').v2;
 const userRolesClient = new PrismaClient().USER_ROLES;
 
 
-exports.getAllProduct = async (req, res) => {
-  try {
-    const { tab, subcategory, skip = 0, limit = 10 } = req.query;
 
-    // Base query
-    const query = {
-      skip: Number(skip),
-      take: Number(limit), // Using 'take' instead of 'limit' for Prisma
-      where: {},
-    };
-
-    // Add category filter if `tab` is provided
-    if (tab) {
-      query.where.category = tab;
-
-      // Add subcategory filter only if applicable
-      if (tab === "drinks" && subcategory) {
-        query.where.subcategory = subcategory;
-      }
-    }
-
-    const products = await prisma.PRODUCT.findMany(query);
-    
-    // Optional: If you want to inform the client about total count for better UX
-    const totalCount = await prisma.PRODUCT.count({ where: query.where });
-
-    res.status(200).json({ 
-      data: products, 
-      status: 200,
-      totalCount: totalCount // This helps in determining if there's more data to load
-    });
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ error: "Internal server error", status: 500 });
-  }
-};
 
 
 exports.getAllProduct = async (req, res) => {
   try {
-    const { tab, subcategory, skip = 0, limit = 10 } = req.query;
+    const { tab, subcategory } = req.query;
 
     // Base query
     const query = {
-      skip: Number(skip),
-      take: Number(limit),
       where: {},
     };
 
