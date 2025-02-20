@@ -15,6 +15,7 @@ exports.getAllProduct = async (req, res) => {
     // Base query
     const query = {
       skip: Number(skip),
+      take: Number(limit), // Using 'take' instead of 'limit' for Prisma
       where: {},
     };
 
@@ -28,8 +29,16 @@ exports.getAllProduct = async (req, res) => {
       }
     }
 
-    const productAll = await prisma.PRODUCT.findMany(query);
-    res.status(200).json({ data: productAll, status: 200 });
+    const products = await prisma.PRODUCT.findMany(query);
+    
+    // Optional: If you want to inform the client about total count for better UX
+    const totalCount = await prisma.PRODUCT.count({ where: query.where });
+
+    res.status(200).json({ 
+      data: products, 
+      status: 200,
+      totalCount: totalCount // This helps in determining if there's more data to load
+    });
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: "Internal server error", status: 500 });
